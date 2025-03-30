@@ -1,10 +1,14 @@
 ﻿using Core.Enums;
+using Core.Utils;
 using UnityEngine;
 
 namespace Actors.Animations
 {
     public class ActorAnimationController
     {
+        private Vector2 LinearVelocity => _rb.linearVelocity;
+        private Vector2 AnimationVelocity => new (_withLeftSide ? LinearVelocity.x : Mathf.Abs(LinearVelocity.x), LinearVelocity.y);
+        
         private static readonly int VelocityXAnimatorFieldName = Animator.StringToHash("VelocityX");
         private static readonly int VelocityYAnimatorFieldName = Animator.StringToHash("VelocityY");
         private static readonly int LastVelocityXAnimatorFieldName = Animator.StringToHash("LastVelocityX");
@@ -31,22 +35,33 @@ namespace Actors.Animations
 
         public void Update()
         {
-            float animationVelocityX = _withLeftSide ? _rb.linearVelocity.x : Mathf.Abs(_rb.linearVelocity.x);
-            float animationVelocityY = _rb.linearVelocity.y;
+            _animator.SetFloat(VelocityXAnimatorFieldName, AnimationVelocity.x);
+            _animator.SetFloat(VelocityYAnimatorFieldName, AnimationVelocity.y);
             
-            _animator.SetFloat(VelocityXAnimatorFieldName, animationVelocityX);
-            _animator.SetFloat(VelocityYAnimatorFieldName, animationVelocityY);
-            _animator.SetBool(IsMovingAnimatorFieldName, animationVelocityX != 0 || animationVelocityY != 0);
+            _animator.SetBool(IsMovingAnimatorFieldName, AnimationVelocity.x != 0 || AnimationVelocity.y != 0);
             
-            if (animationVelocityX != 0)
+            _animator.SetFloat(LastVelocityXAnimatorFieldName, CalculateAnimationLastVelocity(Axis.Horizontal));
+            _animator.SetFloat(LastVelocityYAnimatorFieldName, CalculateAnimationLastVelocity(Axis.Vertical));
+            
+            if (AnimationVelocity.x != 0)
             {
-                _animator.SetFloat(LastVelocityXAnimatorFieldName, animationVelocityX);
-                _spriteRenderer.flipX = _rb.linearVelocity.x < 0;
+                _spriteRenderer.flipX = LinearVelocity.x < 0;
             }
-            if (animationVelocityY != 0)
+        }
+
+        private float CalculateAnimationLastVelocity(Axis axis)
+        {
+            float currentAnimationVelocity = AxisUtils.GetValueFromVectorByAxis(AnimationVelocity, axis); 
+            float otherAnimationVelocity = AxisUtils.GetValueFromVectorByAxis(AnimationVelocity, AxisUtils.GetOppositeAxis(axis));
+
+            return currentAnimationVelocity switch
             {
-                _animator.SetFloat(LastVelocityYAnimatorFieldName, animationVelocityY);
-            }
+                0 when otherAnimationVelocity != 0 => 0,
+                0 => _animator.GetFloat(axis == Axis.Horizontal
+                    ? LastVelocityXAnimatorFieldName
+                    : LastVelocityYAnimatorFieldName),
+                _ => currentAnimationVelocity
+            };
         }
     }
 }
