@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Actors.Animations
 {
-    public class ActorAnimationController
+    public class ActorAnimationsController
     {
         private Vector2 LinearVelocity => _rb.linearVelocity;
         private Vector2 AnimationVelocity => new (_withLeftSide ? LinearVelocity.x : Mathf.Abs(LinearVelocity.x), LinearVelocity.y);
@@ -20,7 +20,7 @@ namespace Actors.Animations
         private readonly Rigidbody2D _rb;
         private readonly SpriteRenderer _spriteRenderer;
         
-        public ActorAnimationController(
+        public ActorAnimationsController(
             Animator animator, 
             Rigidbody2D rb, 
             SpriteRenderer spriteRenderer,

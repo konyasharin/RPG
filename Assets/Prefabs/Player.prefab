@@ -125,7 +125,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.051848948}
+  m_Offset: {x: -0.0011538267, y: 0.051848948}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -135,7 +135,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.252553, y: 0.103697896}
+  m_Size: {x: 0.19255853, y: 0.103697896}
   m_EdgeRadius: 0
 --- !u!95 &6711575198713813978
 Animator:
@@ -200,4 +200,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Rb>k__BackingField: {fileID: 521052383367354012}
   <Animator>k__BackingField: {fileID: 6711575198713813978}
+  <SpriteRenderer>k__BackingField: {fileID: 4160201328518312037}
   <Config>k__BackingField: {fileID: 11400000, guid: d634e4832f7f05c489ea5432a83d28a0, type: 2}
+  healthBar: {fileID: 0}
