@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Actors.Player
 {
-    public class PlayerBehaviour: MonoBehaviour
+    public class PlayerBehaviour: MonoBehaviour, IDamageable
     {
         [field: SerializeField] public Rigidbody2D Rb { get; private set; }
         [field: SerializeField] public Animator Animator { get; private set; }
@@ -15,10 +15,12 @@ namespace Actors.Player
         [field: SerializeField] public PlayerConfig Config { get; private set; }
         
         [SerializeField] private StatBar healthBar;
+        [SerializeField] private StatBar armorBar;
+        
+        public HealthSystem HealthSystem { get; private set; }
         
         private PlayerMoveController _playerMoveController;
         private ActorAnimationsController _animationsController;
-        private HealthStat _healthStat;
 
         [Inject]
         private void Construct(IInput input)
@@ -29,11 +31,10 @@ namespace Actors.Player
         private void Start()
         {
             _animationsController = new ActorAnimationsController(Animator, Rb, SpriteRenderer);
-            _healthStat = new HealthStat(Config.healthSettings);
-            healthBar.BindTo(_healthStat);
+            HealthSystem = new HealthSystem(Config.healthSettings, Config.armorSettings);
+            HealthSystem.BindTo(healthBar, armorBar);
             
-            _healthStat.Reduce(3);
-            _healthStat.Reduce(2);
+            HealthSystem.TakeDamage(5);
         }
 
         private void Update()

@@ -1,55 +1,56 @@
 ﻿using System;
+using R3;
+using UnityEngine;
 
 namespace Actors.Stats
 {
     public abstract class Stat<T> where T : StatSettings
     {
-        public float CurrentValue { get; protected set; }
-        public float Percentage => CurrentValue / Settings.maxValue;
-        public event Action OnChange;
+        public ReadOnlyReactiveProperty<int> CurrentStat => _currentStat;
+        public float Percentage => (float)_currentStat.CurrentValue / Settings.maxValue;
         
         protected readonly T Settings;
+        private readonly ReactiveProperty<int> _currentStat;
         
         protected Stat(T settings)
         {
             Settings = settings;
-            CurrentValue = settings.maxValue;
+            _currentStat = new ReactiveProperty<int>(settings.maxValue);
         }
 
-        public virtual void Add(float value)
+        public virtual void Add(int value)
         {
-            CurrentValue += value;
+            _currentStat.Value += value;
             OnUpdate();
         }
 
-        public virtual void Reduce(float value)
+        public virtual void Reduce(int value)
         {
-            CurrentValue -= value;
+            _currentStat.Value -= value;
             OnUpdate();
         }
 
-        public virtual void Set(float value)
+        public virtual void Set(int value)
         {
-            CurrentValue = value;
+            _currentStat.Value = value;
             OnUpdate();
         }
         
         private void OnUpdate()
         {
             OnCheckValue();
-            OnChange?.Invoke();
         }
 
         protected virtual void OnCheckValue()
         {
-            if (CurrentValue <= 0)
+            if (_currentStat.CurrentValue < 0)
             {
                 Set(0);
             }
 
-            if (CurrentValue > Settings.maxValue)
+            if (_currentStat.CurrentValue > Settings.maxValue)
             {
-                CurrentValue = Settings.maxValue;
+                _currentStat.Value = Settings.maxValue;
             }
         }
     }

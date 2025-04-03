@@ -6,12 +6,12 @@ namespace Actors.Stats
     {
         private event Action OnDeath;
         
-        public HealthStat(StatSettings settings) : base(settings) { }
+        public HealthStat(StatSettings settings) : base(settings) {}
 
         protected override void OnCheckValue()
         {
             base.OnCheckValue();
-            if (CurrentValue <= 0)
+            if (CurrentStat.CurrentValue <= 0)
             {
                 OnDeath?.Invoke();
             }

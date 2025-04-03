@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
   speed: 1
+  healthSettings:
+    maxValue: 10
+  armorSettings:
+    maxValue: 3
