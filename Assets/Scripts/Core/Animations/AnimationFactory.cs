@@ -2,9 +2,9 @@
 {
     public static class AnimationFactory
     {
-        public static AnimationInfo<T> Create<T>(float from, float to, float duration, T type)
+        public static AnimationInfo Create(float from, float to, float duration, NumericAnimationType type)
         {
-            return new AnimationInfo<T>
+            return new AnimationInfo
             {
                 From = from,
                 To = to,

@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Core.Animations
 {
-    public class Animation<T>
+    public class Animation
     {
         public float CurrentValue { get; private set; }
-        public AnimationInfo<T> Info { get; }
+        public AnimationInfo Info { get; private set; }
         
         public ReadOnlyReactiveProperty<bool> IsPlayingReactive => _isPlayingReactiveInternal;
         public ReadOnlyReactiveProperty<bool> IsPausedReactive => _isPausedReactiveInternal;
@@ -18,13 +18,13 @@ namespace Core.Animations
         private readonly ReactiveProperty<bool> _isPausedReactiveInternal = new(false);
         private readonly ReactiveProperty<CancellationTokenSource> _ctsReactiveInternal = new(new CancellationTokenSource());
 
-        public Animation(AnimationInfo<T> info)
+        public Animation(AnimationInfo info)
         {
             Info = info;
             SubscribeOnIsPlayingChange();
         }
         
-        public async UniTaskVoid Animate(Func<AnimationInfo<T>, float, float> getInterpolation, Action<float> onAnimationStep)
+        public async UniTaskVoid Animate(Action<float> onAnimationStep)
         {
             Stop();
             _ctsReactiveInternal.Value = new CancellationTokenSource();
@@ -35,7 +35,7 @@ namespace Core.Animations
                 if (!_isPausedReactiveInternal.CurrentValue)
                 {
                     time += Time.deltaTime;
-                    CurrentValue = getInterpolation(Info, time);
+                    CurrentValue = NumericTweener.GetInterpolationByAnimationType(Info.Type)(Info, time);
                     onAnimationStep(CurrentValue);
                 }
                 await UniTask.Yield(PlayerLoopTiming.Update, _ctsReactiveInternal.CurrentValue.Token);
@@ -57,6 +57,13 @@ namespace Core.Animations
         {
             if (!_ctsReactiveInternal.CurrentValue.IsCancellationRequested)
                 _ctsReactiveInternal.CurrentValue.Cancel();
+        }
+
+        public void ChangeAnimationType(NumericAnimationType newType)
+        {
+            var info = Info;
+            info.Type = newType;
+            Info = info;
         }
         
         private void SubscribeOnIsPlayingChange()

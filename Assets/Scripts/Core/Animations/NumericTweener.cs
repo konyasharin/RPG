@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Threading;
-using Cysharp.Threading.Tasks;
-using R3;
 using UnityEngine;
 
 namespace Core.Animations
 {
     public static class NumericTweener
     {
-        public static Func<AnimationInfo<NumericAnimationType>, float, float> GetInterpolationByAnimationType(NumericAnimationType type)
+        public static Func<AnimationInfo, float, float> GetInterpolationByAnimationType(NumericAnimationType type)
         {
             return type switch
             {
@@ -19,17 +16,17 @@ namespace Core.Animations
             };
         }
 
-        private static float GetLinearInterpolation(AnimationInfo<NumericAnimationType> info, float time)
+        private static float GetLinearInterpolation(AnimationInfo info, float time)
         {
             return Mathf.Lerp(info.From, info.To, time / info.Duration);
         }
 
-        private static float GetEaseOutInterpolation(AnimationInfo<NumericAnimationType> info, float time)
+        private static float GetEaseOutInterpolation(AnimationInfo info, float time)
         {
             return Mathf.Lerp(info.From, info.To, 1 - Mathf.Pow(1 - (time / info.Duration), 2));
         }
         
-        private static float GetEaseInInterpolation(AnimationInfo<NumericAnimationType> info, float time)
+        private static float GetEaseInInterpolation(AnimationInfo info, float time)
         {
             return Mathf.Lerp(info.From, info.To, Mathf.Pow(time / info.Duration, 2));
         }

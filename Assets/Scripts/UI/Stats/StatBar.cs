@@ -1,9 +1,9 @@
 ﻿using Actors.Stats;
 using Core.Animations;
-using JetBrains.Annotations;
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
+using Animation = Core.Animations.Animation;
 
 namespace UI.Stats
 {
@@ -13,9 +13,9 @@ namespace UI.Stats
         
         public Stat<StatSettings> Stat { get; private set; }
 
-        public ReadOnlyReactiveProperty<Animation<NumericAnimationType>> AnimationReactive =>
+        public ReadOnlyReactiveProperty<Animation> AnimationReactive =>
             _animationReactiveInternal;
-        private readonly ReactiveProperty<Animation<NumericAnimationType>> _animationReactiveInternal = new();
+        private readonly ReactiveProperty<Animation> _animationReactiveInternal = new();
         
         private const float AnimationDuration = 1.5f;
         
@@ -34,13 +34,10 @@ namespace UI.Stats
             )
                 prevAnimation.Stop();
             
-            _animationReactiveInternal.Value = new Animation<NumericAnimationType>(AnimationFactory.Create(image.fillAmount, Stat.Percentage,
+            _animationReactiveInternal.Value = new Animation(AnimationFactory.Create(image.fillAmount, Stat.Percentage,
                 AnimationDuration, NumericAnimationType.EaseOut));
             _animationReactiveInternal.CurrentValue?
-                .Animate(
-                    NumericTweener.GetInterpolationByAnimationType(_animationReactiveInternal.CurrentValue.Info.Type),
-                    OnAnimationStep
-                )
+                .Animate(OnAnimationStep)
                 .Forget();
         }
 

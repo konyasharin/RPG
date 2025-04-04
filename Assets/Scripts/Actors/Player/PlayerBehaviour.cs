@@ -1,4 +1,5 @@
 ﻿using Actors.Animations;
+using Actors.Movement;
 using Actors.Stats;
 using Input;
 using UI.Stats;
@@ -7,7 +8,7 @@ using Zenject;
 
 namespace Actors.Player
 {
-    public class PlayerBehaviour: MonoBehaviour, IDamageable
+    public class PlayerBehaviour: MonoBehaviour, IDamageable, IMoveable
     {
         [field: SerializeField] public Rigidbody2D Rb { get; private set; }
         [field: SerializeField] public Animator Animator { get; private set; }
@@ -20,7 +21,7 @@ namespace Actors.Player
         public HealthSystem HealthSystem { get; private set; }
         
         private PlayerMoveController _playerMoveController;
-        private ActorAnimationsController _animationsController;
+        private ActorMoveAnimationsController _moveAnimationsController;
         private HealthSystemUi _healthSystemUi;
 
         [Inject]
@@ -31,7 +32,7 @@ namespace Actors.Player
 
         private void Start()
         {
-            _animationsController = new ActorAnimationsController(Animator, Rb, SpriteRenderer);
+            _moveAnimationsController = new ActorMoveAnimationsController(this);
             HealthSystem = new HealthSystem(Config.healthSettings, Config.armorSettings);
             HealthSystem.BindTo(healthBar, armorBar);
             _healthSystemUi = new HealthSystemUi(healthBar, armorBar);
@@ -42,7 +43,7 @@ namespace Actors.Player
         private void Update()
         {
             _playerMoveController.Update();
-            _animationsController.Update();
+            _moveAnimationsController.Update();
         }
     }
 }
