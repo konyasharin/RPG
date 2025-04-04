@@ -21,6 +21,7 @@ namespace Actors.Player
         
         private PlayerMoveController _playerMoveController;
         private ActorAnimationsController _animationsController;
+        private HealthSystemUi _healthSystemUi;
 
         [Inject]
         private void Construct(IInput input)
@@ -33,8 +34,9 @@ namespace Actors.Player
             _animationsController = new ActorAnimationsController(Animator, Rb, SpriteRenderer);
             HealthSystem = new HealthSystem(Config.healthSettings, Config.armorSettings);
             HealthSystem.BindTo(healthBar, armorBar);
+            _healthSystemUi = new HealthSystemUi(healthBar, armorBar);
             
-            HealthSystem.TakeDamage(5);
+            HealthSystem.TakeDamage(60);
         }
 
         private void Update()

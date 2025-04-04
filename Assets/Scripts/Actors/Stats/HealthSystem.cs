@@ -5,8 +5,8 @@ namespace Actors.Stats
 {
     public class HealthSystem
     {
-        public int Health => _healthStat.CurrentStat.CurrentValue;
-        public int? Armor => _armorStat?.CurrentStat.CurrentValue;
+        public int Health => _healthStat.CurrentStatReactive.CurrentValue;
+        public int? Armor => _armorStat?.CurrentStatReactive.CurrentValue;
         
         private readonly HealthStat _healthStat;
         [CanBeNull] private readonly ArmorStat _armorStat;
@@ -27,7 +27,7 @@ namespace Actors.Stats
         {
             if (_armorStat != null)
             {
-                int remainingDamage = damage - _armorStat.CurrentStat.CurrentValue;
+                int remainingDamage = damage - _armorStat.CurrentStatReactive.CurrentValue;
                 _armorStat.Reduce(damage);
 
                 if (remainingDamage > 0) _healthStat.Reduce(remainingDamage);

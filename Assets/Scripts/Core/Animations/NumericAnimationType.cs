@@ -4,5 +4,6 @@
     {
         Linear,
         EaseOut,
+        EaseIn,
     }
 }
