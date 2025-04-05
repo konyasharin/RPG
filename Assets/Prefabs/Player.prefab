@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 9116176005439276880}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -203,3 +203,4 @@ MonoBehaviour:
   <SpriteRenderer>k__BackingField: {fileID: 4160201328518312037}
   <Config>k__BackingField: {fileID: 11400000, guid: d634e4832f7f05c489ea5432a83d28a0, type: 2}
   healthBar: {fileID: 0}
+  armorBar: {fileID: 0}

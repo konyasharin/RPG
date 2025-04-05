@@ -15,7 +15,7 @@ namespace Actors.Player
 
         public void Update()
         {
-            _player.Rb.linearVelocity = _input.InputMove * _player.Config.speed;
+            _player.Rb.linearVelocity = _input.InputMove.normalized * _player.Config.speed;
         }
     }
 }

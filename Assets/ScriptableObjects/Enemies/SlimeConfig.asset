@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b2a8af557a4e7b913e5b507c6f862c, type: 3}
   m_Name: SlimeConfig
   m_EditorClassIdentifier: 
-  speed: 5
-  damage: 5
+  speed: 0.15
+  baseAttack:
+    damage: 0
+    cooldown: 0
   healthSettings:
-    maxValue: 0
+    maxValue: 20
   armorSettings:
     maxValue: 0
+  collisionAttack:
+    damage: 10
+    cooldown: 0.5

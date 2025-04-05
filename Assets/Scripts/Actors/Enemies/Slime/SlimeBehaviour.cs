@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Actors.Enemies.Slime
 {
-    public class SlimeBehaviour : EnemyBehaviour<EnemyConfig>
+    public class SlimeBehaviour : EnemyBehaviour
     {
         [SerializeField] private SlimeConfig config;
         private PlayerBehaviour _player;
